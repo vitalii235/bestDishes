@@ -46,12 +46,16 @@ export default function SignIn() {
               style={inputField}
               value={email}
               onChangeText={(e) => handleChange(e, 'email')}
+              placeholder="Email"
+              placeholderTextColor="#fff"
             />
             <TextInput
               style={inputField}
               secureTextEntry={true}
+              placeholder="Password"
               value={password}
               onChangeText={handleChange}
+              placeholderTextColor="#fff"
             />
             <Button title="Submit" onPress={handleSubmit} />
           </View>
