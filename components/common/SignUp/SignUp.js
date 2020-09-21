@@ -7,10 +7,12 @@ import {
   TextInput,
   TouchableWithoutFeedback,
   Keyboard,
+  Alert,
 } from 'react-native';
+import {authApi} from '../../../services/API';
 import {SignUpContainer} from './styles';
 
-export default function SignUp() {
+export default function SignUp({navigation}) {
   const {container, inputField, inputContainer} = SignUpContainer;
   const [state, setState] = useState({
     email: '',
@@ -37,11 +39,13 @@ export default function SignUp() {
           first_name,
           last_name,
         };
-        console.log('DATA===>>>', data);
-        // await Axios.post(
-        //   'http://178.150.163.118:3030/swagger/index.html',
-        //   data,
-        // );
+        try {
+          await authApi.signUp(data);
+          navigation.navigate('SignIn');
+        } catch (e) {
+          console.error(e);
+          Alert.alert('something went wrong');
+        }
       }
     } catch (e) {
       console.error(e);
@@ -60,6 +64,7 @@ export default function SignUp() {
               onChangeText={(e) => handleChange(e, 'email')}
               placeholder="Email"
               placeholderTextColor="#fff"
+              autoCapitalize="none"
             />
             <TextInput
               style={inputField}

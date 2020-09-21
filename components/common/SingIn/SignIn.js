@@ -12,6 +12,7 @@ import {
 import {SignInContainer} from './styles';
 import {Context} from '../../../Context/Context';
 import AsyncStorage from '@react-native-community/async-storage';
+import {authApi} from '../../../services/API';
 
 export default function SignIn() {
   const {container, inputField, inputContainer} = SignInContainer;
@@ -27,11 +28,20 @@ export default function SignIn() {
       : setState({...state, password: e});
   };
   const handleSubmit = async () => {
-    if (email === 'User' && password === 'Password') {
-      await AsyncStorage.setItem('token', 'qqq');
-      checkStorage();
-    } else {
-      Alert.alert('Wrong data');
+    const {email, password} = state;
+    const data = {
+      email,
+      password,
+    };
+    try {
+      const res = await authApi.signIn(data);
+      if (res.data) {
+        await AsyncStorage.setItem('token', res.data.token);
+        checkStorage();
+      }
+    } catch (e) {
+      console.error(e);
+      Alert.alert('WRONG DATA');
     }
   };
 
@@ -48,6 +58,7 @@ export default function SignIn() {
               onChangeText={(e) => handleChange(e, 'email')}
               placeholder="Email"
               placeholderTextColor="#fff"
+              autoCapitalize="none"
             />
             <TextInput
               style={inputField}

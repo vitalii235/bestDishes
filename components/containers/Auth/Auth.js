@@ -24,7 +24,7 @@ export default function Auth() {
         })}
         tabBarOptions={{
           activeTintColor: 'tomato',
-          inactiveTintColor: 'gray',
+          inactiveTintColor: 'red',
         }}>
         <Tab.Screen name="SignIn" component={SignIn} />
         <Tab.Screen name="SignUp" component={SignUp} />

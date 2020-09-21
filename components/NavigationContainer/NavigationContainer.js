@@ -15,6 +15,7 @@ export default function NavigatiorContainer() {
     await AsyncStorage.clear();
     await checkStorage();
   };
+
   return (
     <NavigationContainer>
       <Stack.Navigator
