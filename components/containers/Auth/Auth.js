@@ -1,9 +1,9 @@
 import React from 'react';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import {Text, View} from 'react-native';
-import SignUp from '../../common/SignUp/SignUp';
 import SignIn from '../../common/SingIn/SignIn';
 import IconAntDesign from 'react-native-vector-icons/AntDesign';
+import SignUpNavScreen from '../../common/SignUp/SignUpNavScreen';
 
 export default function Auth() {
   const Tab = createBottomTabNavigator();
@@ -27,7 +27,7 @@ export default function Auth() {
           inactiveTintColor: 'red',
         }}>
         <Tab.Screen name="SignIn" component={SignIn} />
-        <Tab.Screen name="SignUp" component={SignUp} />
+        <Tab.Screen name="SignUp" component={SignUpNavScreen} />
       </Tab.Navigator>
     </View>
   );

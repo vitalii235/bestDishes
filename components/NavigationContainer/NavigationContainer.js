@@ -15,7 +15,20 @@ export default function NavigatiorContainer() {
     await AsyncStorage.clear();
     await checkStorage();
   };
-
+  const getHeaderTitle = (route) => {
+    console.log('ROUTE===>>>', route);
+    const routeName = route.state
+      ? route.state.routes[route.state.index].name
+      : 'Auth';
+    switch (routeName) {
+      case 'Auth':
+        return 'Auth';
+      case 'SignIn':
+        return 'SignIn';
+      case 'SignUp':
+        return 'SignUp';
+    }
+  };
   return (
     <NavigationContainer>
       <Stack.Navigator
@@ -32,7 +45,13 @@ export default function NavigatiorContainer() {
           },
         }}>
         {!auth ? (
-          <Stack.Screen name="Auth" component={Auth} />
+          <Stack.Screen
+            name="Auth"
+            component={Auth}
+            options={({route}) => {
+              return {headerTitle: getHeaderTitle(route)};
+            }}
+          />
         ) : (
           <Stack.Screen
             name="Home"
