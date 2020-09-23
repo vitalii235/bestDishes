@@ -1,13 +1,14 @@
-import React from 'react';
+import React, {memo} from 'react';
 import {StyleSheet, Text, View} from 'react-native';
 import NavigatiorContainer from './components/NavigationContainer/NavigationContainer';
 import {ContextProvider} from './Context/Context';
 
 export default function App() {
+  const Navigation = memo(() => <NavigatiorContainer />);
   return (
     <View style={styles.container}>
       <ContextProvider>
-        <NavigatiorContainer />
+        <Navigation />
       </ContextProvider>
     </View>
   );

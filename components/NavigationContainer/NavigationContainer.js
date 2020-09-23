@@ -19,7 +19,7 @@ export default function NavigatiorContainer() {
     console.log('ROUTE===>>>', route);
     const routeName = route.state
       ? route.state.routes[route.state.index].name
-      : 'Auth';
+      : 'SignIn';
     switch (routeName) {
       case 'Auth':
         return 'Auth';

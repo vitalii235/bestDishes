@@ -1,6 +1,6 @@
 import React from 'react';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
-import {Text, View} from 'react-native';
+import {View} from 'react-native';
 import SignIn from '../../common/SingIn/SignIn';
 import IconAntDesign from 'react-native-vector-icons/AntDesign';
 import SignUpNavScreen from '../../common/SignUp/SignUpNavScreen';
