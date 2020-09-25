@@ -6,11 +6,11 @@ export const SignInContainer = StyleSheet.create({
     paddingHorizontal: 24,
     alignItems: 'center',
   },
-
   cardContainer: {
     top: '25%',
     width: '100%',
     backgroundColor: 'rgba(52, 52, 52, 0.8)',
+    borderRadius: 10,
   },
   inputContainer: {
     width: '100%',

@@ -14,6 +14,7 @@ export const SignUpContainer = StyleSheet.create({
     top: '13%',
     width: '100%',
     backgroundColor: 'rgba(52, 52, 52, 0.8)',
+    borderRadius: 10,
   },
   title: {
     color: '#fff',

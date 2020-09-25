@@ -16,7 +16,6 @@ export default function NavigatiorContainer() {
     await checkStorage();
   };
   const getHeaderTitle = (route) => {
-    console.log('ROUTE===>>>', route);
     const routeName = route.state
       ? route.state.routes[route.state.index].name
       : 'SignIn';

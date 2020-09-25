@@ -1,5 +1,5 @@
 import React, {memo} from 'react';
-import {StyleSheet, Text, View} from 'react-native';
+import {StyleSheet, View} from 'react-native';
 import NavigatiorContainer from './components/NavigationContainer/NavigationContainer';
 import {ContextProvider} from './Context/Context';
 
@@ -20,6 +20,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
     color: '#fff',
     justifyContent: 'center',
+    position: 'relative',
   },
 });
 

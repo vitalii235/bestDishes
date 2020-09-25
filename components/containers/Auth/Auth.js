@@ -3,13 +3,13 @@ import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import {View} from 'react-native';
 import SignIn from '../../common/SingIn/SignIn';
 import IconAntDesign from 'react-native-vector-icons/AntDesign';
-import SignUpNavScreen from '../../common/SignUp/SignUpNavScreen';
+import SignUp from '../../common/SignUp/SignUp';
 
 export default function Auth() {
   const Tab = createBottomTabNavigator();
 
   return (
-    <View style={{flex: 1}}>
+    <View style={{flex: 1, position: 'relative'}}>
       <Tab.Navigator
         screenOptions={({route}) => ({
           tabBarIcon: ({focused, color, size}) => {
@@ -27,7 +27,7 @@ export default function Auth() {
           inactiveTintColor: 'red',
         }}>
         <Tab.Screen name="SignIn" component={SignIn} />
-        <Tab.Screen name="SignUp" component={SignUpNavScreen} />
+        <Tab.Screen name="SignUp" component={SignUp} />
       </Tab.Navigator>
     </View>
   );

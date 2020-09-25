@@ -8,7 +8,6 @@ export const ContextProvider = ({children}) => {
 
   const checkStorage = async () => {
     const res = await AsyncStorage.getItem('token');
-    console.log('TOKEN===>>', res);
     if (res !== null) {
       setAuth(true);
     } else {

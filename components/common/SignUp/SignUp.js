@@ -5,16 +5,17 @@ import {
   TouchableWithoutFeedback,
   Keyboard,
   Alert,
-  Text,
 } from 'react-native';
 import {authApi} from '../../../services/API';
 import {SignUpContainer} from './styles';
 import {Button, Input, Card} from 'react-native-elements';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
-import SnackBar from 'react-native-snackbar-component';
+import useInput from '../../../hooks/useInput';
+import useSnackBar from '../../../hooks/snackBar';
 
 export default function SignUp({navigation}) {
+  //Styles
   const {
     container,
     inputField,
@@ -23,68 +24,56 @@ export default function SignUp({navigation}) {
     iconContainer,
     title,
   } = SignUpContainer;
-  const [state, setState] = useState({
-    email: '',
-    password: '',
-    confirmPassword: '',
-    first_name: '',
-    last_name: '',
-  });
+  //Custom hooks
+  const emailInput = useInput();
+  const passwordInput = useInput();
+  const confirmPasswordInput = useInput();
+  const firstNameInput = useInput();
+  const lastNameInput = useInput();
+  const snackBar = useSnackBar();
+  //Local state
   const [isPasswordShown, setIsPaswordShown] = useState(false);
   const [isConfirmPasswordShown, setIsConfirmPasswordShown] = useState(false);
   const [loaderStarted, setLoaderStarted] = useState(false);
-  const {email, password, first_name, last_name, confirmPassword} = state;
-  const handleChange = (e, fieldName) => {
-    fieldName === 'email'
-      ? setState({...state, email: e})
-      : fieldName === 'password'
-      ? setState({...state, password: e})
-      : fieldName === 'confirmPassword'
-      ? setState({...state, confirmPassword: e})
-      : fieldName === 'firstName'
-      ? setState({...state, first_name: e})
-      : setState({...state, last_name: e});
-  };
+  //Functions
   const handleSubmit = async () => {
-    if (password === confirmPassword) {
-      try {
-        if (email && password && first_name && last_name) {
-          setLoaderStarted(true);
-          const data = {
-            email,
-            password,
-            first_name,
-            last_name,
-          };
-          try {
-            await authApi.signUp(data);
-            setLoaderStarted(false);
-            navigation.navigate('SignIn');
-          } catch (e) {
-            console.error(e);
-            setLoaderStarted(false);
-            Alert.alert('something went wrong');
-          }
+    snackBar.hideMessage();
+    if (passwordInput.value === confirmPasswordInput.value) {
+      if (
+        emailInput.value &&
+        passwordInput.value &&
+        firstNameInput.value &&
+        lastNameInput.value
+      ) {
+        setLoaderStarted(true);
+        const data = {
+          email: emailInput.value,
+          password: passwordInput.value,
+          first_name: firstNameInput.value,
+          last_name: lastNameInput.value,
+        };
+        try {
+          await authApi.signUp(data);
+          setLoaderStarted(false);
+          navigation.navigate('SignIn');
+        } catch (e) {
+          console.error(e);
+          setLoaderStarted(false);
+          snackBar.showMessage('Something went wrong', {
+            backgroundColor: 'red',
+          });
         }
-      } catch (e) {
-        console.error(e);
+      } else {
+        snackBar.showMessage('Please fill all fields');
       }
     } else {
+      snackBar.showMessage('Passwords does not match');
     }
   };
   return (
     <ImageBackground
       source={require('../../../public/images/authBackground.jpg')}
       style={{flex: 1, resizeMode: 'auto'}}>
-      <View style={{width: '100%'}}>
-        <SnackBar
-          visible={true}
-          textMessage="Hello There!"
-          position="top"
-          top={20}
-          backgroundColor="red"
-        />
-      </View>
       <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
         <View style={container}>
           <Card containerStyle={cardContainer}>
@@ -93,8 +82,7 @@ export default function SignUp({navigation}) {
             <View style={inputContainer}>
               <Input
                 style={inputField}
-                value={email}
-                onChangeText={(e) => handleChange(e, 'email')}
+                {...emailInput}
                 placeholder="Email"
                 autoCapitalize="none"
                 rightIconContainerStyle={iconContainer}
@@ -110,8 +98,7 @@ export default function SignUp({navigation}) {
               <Input
                 style={inputField}
                 secureTextEntry={!isPasswordShown}
-                value={password}
-                onChangeText={(e) => handleChange(e, 'password')}
+                {...passwordInput}
                 placeholder="Password"
                 rightIconContainerStyle={iconContainer}
                 rightIcon={
@@ -135,8 +122,7 @@ export default function SignUp({navigation}) {
               <Input
                 style={inputField}
                 secureTextEntry={!isConfirmPasswordShown}
-                value={confirmPassword}
-                onChangeText={(e) => handleChange(e, 'confirmPassword')}
+                {...confirmPasswordInput}
                 placeholder="Confirm Password"
                 rightIconContainerStyle={iconContainer}
                 rightIcon={
@@ -163,14 +149,12 @@ export default function SignUp({navigation}) {
               />
               <Input
                 style={inputField}
-                value={first_name}
-                onChangeText={(e) => handleChange(e, 'firstName')}
+                {...firstNameInput}
                 placeholder="First name"
               />
               <Input
                 style={inputField}
-                value={last_name}
-                onChangeText={handleChange}
+                {...lastNameInput}
                 placeholder="Last name"
               />
               <Button
@@ -183,6 +167,7 @@ export default function SignUp({navigation}) {
           </Card>
         </View>
       </TouchableWithoutFeedback>
+      {snackBar.messageText()}
     </ImageBackground>
   );
 }

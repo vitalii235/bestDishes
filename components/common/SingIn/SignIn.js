@@ -5,6 +5,7 @@ import {
   View,
   Keyboard,
   TouchableWithoutFeedback,
+  Text,
 } from 'react-native';
 
 import {SignInContainer} from './styles';
@@ -14,8 +15,11 @@ import {authApi} from '../../../services/API';
 import {Input, Card, Button} from 'react-native-elements';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
+import useInput from '../../../hooks/useInput';
+import useSnackBar from '../../../hooks/snackBar';
 
 export default function SignIn() {
+  //styles
   const {
     container,
     inputField,
@@ -24,25 +28,21 @@ export default function SignIn() {
     iconContainer,
     title,
   } = SignInContainer;
+  //contextData
   const {checkStorage} = useContext(Context);
+  //Loccal state
   const [isPasswordShown, setIsPaswordShown] = useState(false);
   const [loaderStarted, setLoaderStarted] = useState(false);
-  const [state, setState] = useState({
-    email: '',
-    password: '',
-  });
-  const {email, password} = state;
-  const handleChange = (e, fieldName) => {
-    fieldName === 'email'
-      ? setState({...state, email: e})
-      : setState({...state, password: e});
-  };
+  //custom hooks
+  const emailInput = useInput();
+  const passwordInput = useInput();
+  const snackBar = useSnackBar();
+  //functions
   const handleSubmit = async () => {
     setLoaderStarted(true);
-    const {email, password} = state;
     const data = {
-      email,
-      password,
+      email: emailInput.value,
+      password: passwordInput.value,
     };
     try {
       const res = await authApi.signIn(data);
@@ -53,7 +53,7 @@ export default function SignIn() {
       }
     } catch (e) {
       console.error(e);
-      Alert.alert('WRONG DATA');
+      snackBar.showMessage('Something is wrong');
       setLoaderStarted(false);
     }
   };
@@ -72,8 +72,7 @@ export default function SignIn() {
                 style={inputField}
                 placeholder="Email"
                 autoCapitalize="none"
-                value={email}
-                onChangeText={(e) => handleChange(e, 'email')}
+                {...emailInput}
                 rightIconContainerStyle={iconContainer}
                 rightIcon={
                   <MaterialIcons
@@ -87,8 +86,7 @@ export default function SignIn() {
                 style={inputField}
                 secureTextEntry={!isPasswordShown}
                 placeholder="Password"
-                value={password}
-                onChangeText={handleChange}
+                {...passwordInput}
                 rightIconContainerStyle={iconContainer}
                 rightIcon={
                   isPasswordShown ? (
@@ -118,6 +116,7 @@ export default function SignIn() {
           </Card>
         </View>
       </TouchableWithoutFeedback>
+      {snackBar.messageText()}
     </ImageBackground>
   );
 }
