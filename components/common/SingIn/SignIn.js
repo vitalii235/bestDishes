@@ -18,7 +18,7 @@ import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import useInput from '../../../hooks/useInput';
 import useSnackBar from '../../../hooks/snackBar';
 
-export default function SignIn() {
+export default function SignIn({navigation}) {
   //styles
   const {
     container,
@@ -50,6 +50,7 @@ export default function SignIn() {
         await AsyncStorage.setItem('token', res.data.token);
         setLoaderStarted(false);
         checkStorage();
+        navigation.navigate('Home');
       }
     } catch (e) {
       console.error(e);

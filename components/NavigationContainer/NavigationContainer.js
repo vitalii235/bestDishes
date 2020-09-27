@@ -11,10 +11,15 @@ const Stack = createStackNavigator();
 export default function NavigatiorContainer() {
   const {auth, checkStorage} = useContext(Context);
 
-  const logOut = async () => {
-    await AsyncStorage.clear();
-    await checkStorage();
+  const logIn = async (navigation) => {
+    navigation.navigate('Auth');
   };
+  const logOut = async () => {
+    console.log('AUTH===>>>', auth);
+    await AsyncStorage.clear();
+    checkStorage();
+  };
+
   const getHeaderTitle = (route) => {
     const routeName = route.state
       ? route.state.routes[route.state.index].name
@@ -43,26 +48,30 @@ export default function NavigatiorContainer() {
             elevation: 11,
           },
         }}>
-        {!auth ? (
-          <Stack.Screen
-            name="Auth"
-            component={Auth}
-            options={({route}) => {
-              return {headerTitle: getHeaderTitle(route)};
-            }}
-          />
-        ) : (
-          <Stack.Screen
-            name="Home"
-            component={Home}
-            options={{
-              headerTitle: 'Home',
-              headerRight: () => (
-                <Button onPress={logOut} title="LogOut" color="black" />
-              ),
-            }}
-          />
-        )}
+        <Stack.Screen
+          name="Home"
+          component={Home}
+          options={({navigation, route}) => ({
+            headerTitle: 'Home',
+            headerRightContainerStyle: {
+              paddingHorizontal: 20,
+            },
+            headerRight: () => (
+              <Button
+                onPress={auth ? logOut : () => logIn(navigation)}
+                title={auth ? 'logOut' : 'SignIn'}
+                color="black"
+              />
+            ),
+          })}
+        />
+        <Stack.Screen
+          name="Auth"
+          component={Auth}
+          options={({route}) => {
+            return {headerTitle: getHeaderTitle(route)};
+          }}
+        />
       </Stack.Navigator>
     </NavigationContainer>
   );
