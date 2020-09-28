@@ -1,10 +1,15 @@
-import React from 'react';
-import {View, Text} from 'react-native';
+import React, {useContext, useLayoutEffect} from 'react';
+import {View, Text, Button} from 'react-native';
+import {Context} from '../../../Context/Context';
 
-export default function Description() {
+export default function Description({navigation}) {
+  const {
+    currentDish: {id},
+  } = useContext(Context);
+
   return (
     <View>
-      <Text>Description</Text>
+      <Text>{id}</Text>
     </View>
   );
 }

@@ -6,6 +6,8 @@ import Auth from '../containers/Auth/Auth';
 import Home from '../containers/Home/Home';
 import {Context} from '../../Context/Context';
 import AsyncStorage from '@react-native-community/async-storage';
+import Info from '../common/Info/Info';
+import Description from '../common/Description/Description';
 
 const Stack = createStackNavigator();
 export default function NavigatiorContainer() {
@@ -50,7 +52,7 @@ export default function NavigatiorContainer() {
         }}>
         <Stack.Screen
           name="Home"
-          component={Home}
+          component={Info}
           options={({navigation, route}) => ({
             headerTitle: 'Home',
             headerRightContainerStyle: {
@@ -65,6 +67,7 @@ export default function NavigatiorContainer() {
             ),
           })}
         />
+        <Stack.Screen name="Description" component={Description} />
         <Stack.Screen
           name="Auth"
           component={Auth}

@@ -1,24 +1,51 @@
-import React, {useContext, useEffect, useState} from 'react';
-import {View, Text, FlatList} from 'react-native';
+import React, {useContext, useEffect, useLayoutEffect, useState} from 'react';
+import {View, Text, FlatList, Button} from 'react-native';
+import {Card} from 'react-native-elements';
+import {TouchableOpacity} from 'react-native-gesture-handler';
 import {Context} from '../../../Context/Context';
 import {recipiesApi} from '../../../services/API';
 
-export default function Info() {
+export default function Info({navigation}) {
   async function getRecepies() {
     const res = await recipiesApi.getList();
-    setData(res.data);
+    setRecepiesList(res.data);
   }
-  const {auth} = useContext(Context);
-  const [data, setData] = useState([]);
+  const {setDataForCurrentDish} = useContext(Context);
+  const [recepiesList, setRecepiesList] = useState([]);
 
   useEffect(() => {
-    if (auth) {
+    if (!recepiesList.length) {
       getRecepies();
     } else {
-      setData([]);
+      setRecepiesList([]);
     }
-  }, [auth]);
+  }, []);
 
+  function cardWithRecipe({item}) {
+    return (
+      <Card>
+        <TouchableOpacity
+          onPress={() => {
+            setDataForCurrentDish('id', item.id);
+            navigation.navigate('Description');
+          }}>
+          <View>
+            <Text>{item.name}</Text>
+            {item.instructions[0] && (
+              <Card.Image
+                source={{
+                  uri: item.instructions[item.instructions.length - 1].image
+                    ? item.instructions[item.instructions.length - 1].image
+                    : null,
+                }}
+              />
+            )}
+          </View>
+        </TouchableOpacity>
+        <Card.Divider />
+      </Card>
+    );
+  }
   return (
     <View
       style={{
@@ -28,12 +55,8 @@ export default function Info() {
       }}>
       <Text>Info!</Text>
       <FlatList
-        data={data}
-        renderItem={({item}) => (
-          <View>
-            <Text>{item.name}</Text>
-          </View>
-        )}
+        data={recepiesList}
+        renderItem={cardWithRecipe}
         keyExtractor={(item) => item.id}
       />
     </View>
