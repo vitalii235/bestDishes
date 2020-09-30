@@ -40,7 +40,7 @@ export default function Description({navigation}) {
   // List of nutritions
   const nutritionsList = (item) => {
     return (
-      <View style={nutritionsContainer}>
+      <View style={nutritionsContainer} key={Math.random().toString()}>
         <Text>{item.portion_amount}:</Text>
         <Text>
           {item.energy_value}, Б-{item.proteins} Ж-{item.fats} У-
