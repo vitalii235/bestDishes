@@ -21,4 +21,12 @@ export const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
   },
+  instructionImage: {
+    width: 'auto',
+    height: 300,
+  },
+  nutritionsContainer: {
+    flex: 1,
+    flexDirection: 'row',
+  },
 });
