@@ -12,4 +12,7 @@ export const authApi = {
 
 export const recipiesApi = {
   getList: () => Axios.get(`${BASE_URL}${RECIPIES_LIST}`),
+  getRecipe: (id) => Axios.get(`${BASE_URL}${RECIPIES_LIST}/${id}`),
 };
+
+// 5f69e1923209b203df471df5

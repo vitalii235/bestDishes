@@ -3,7 +3,6 @@ import {Button} from 'react-native';
 import {NavigationContainer} from '@react-navigation/native';
 import {createStackNavigator} from '@react-navigation/stack';
 import Auth from '../containers/Auth/Auth';
-import Home from '../containers/Home/Home';
 import {Context} from '../../Context/Context';
 import AsyncStorage from '@react-native-community/async-storage';
 import Info from '../common/Info/Info';
@@ -17,7 +16,6 @@ export default function NavigatiorContainer() {
     navigation.navigate('Auth');
   };
   const logOut = async () => {
-    console.log('AUTH===>>>', auth);
     await AsyncStorage.clear();
     checkStorage();
   };

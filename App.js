@@ -5,6 +5,7 @@ import {ContextProvider} from './Context/Context';
 
 export default function App() {
   const Navigation = memo(() => <NavigatiorContainer />);
+  
   return (
     <View style={styles.container}>
       <ContextProvider>

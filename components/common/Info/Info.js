@@ -1,17 +1,20 @@
-import React, {useContext, useEffect, useLayoutEffect, useState} from 'react';
-import {View, Text, FlatList, Button} from 'react-native';
+import React, {useContext, useEffect, useState} from 'react';
+import {View, Text, FlatList} from 'react-native';
 import {Card} from 'react-native-elements';
 import {TouchableOpacity} from 'react-native-gesture-handler';
 import {Context} from '../../../Context/Context';
+import useSearchBar from '../../../hooks/useSearchBar';
 import {recipiesApi} from '../../../services/API';
+import _ from 'lodash';
 
 export default function Info({navigation}) {
+  const {setDataForCurrentDish} = useContext(Context);
+  const [recepiesList, setRecepiesList] = useState([]);
+
   async function getRecepies() {
     const res = await recipiesApi.getList();
     setRecepiesList(res.data);
   }
-  const {setDataForCurrentDish} = useContext(Context);
-  const [recepiesList, setRecepiesList] = useState([]);
 
   useEffect(() => {
     if (!recepiesList.length) {
@@ -21,39 +24,45 @@ export default function Info({navigation}) {
     }
   }, []);
 
+  const searchBar = useSearchBar();
+
   function cardWithRecipe({item}) {
-    return (
-      <Card>
-        <TouchableOpacity
-          onPress={() => {
-            setDataForCurrentDish('id', item.id);
-            navigation.navigate('Description');
-          }}>
-          <View>
-            <Text>{item.name}</Text>
-            {item.instructions[0] && (
-              <Card.Image
-                source={{
-                  uri: item.instructions[item.instructions.length - 1].image
-                    ? item.instructions[item.instructions.length - 1].image
-                    : null,
-                }}
-              />
-            )}
-          </View>
-        </TouchableOpacity>
-        <Card.Divider />
-      </Card>
-    );
+    if (!item.name || !item.categories.length || !item.image) {
+      return null;
+    } else {
+      return (
+        <Card>
+          <TouchableOpacity
+            onPress={() => {
+              setDataForCurrentDish('id', item.id);
+              navigation.navigate('Description');
+            }}>
+            <View>
+              <Text>{item.name}</Text>
+              <Card.Divider />
+              <Text>Категория: {item.categories.join(', ')}</Text>
+              {_.first(item.instructions) && (
+                <Card.Image
+                  source={{
+                    uri: item.image,
+                  }}
+                />
+              )}
+            </View>
+            <Text>Время приготовления: {item.total_time}</Text>
+          </TouchableOpacity>
+        </Card>
+      );
+    }
   }
+
   return (
     <View
       style={{
         flex: 1,
         justifyContent: 'center',
-        alignItems: 'center',
       }}>
-      <Text>Info!</Text>
+      {searchBar.searchBar()}
       <FlatList
         data={recepiesList}
         renderItem={cardWithRecipe}

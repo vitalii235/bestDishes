@@ -11,7 +11,6 @@ function useSnackBar() {
   const showMessage = (message, styles) => {
     setState(true);
     setText(message);
-    console.log('STYLES===>>>', styles);
     styles && setBottomDistance({...styles});
   };
 
