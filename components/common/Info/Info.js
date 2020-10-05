@@ -1,28 +1,35 @@
 import React, {useContext, useEffect, useState} from 'react';
-import {View, Text, FlatList} from 'react-native';
+import {View, Text, FlatList, Button} from 'react-native';
 import {Card} from 'react-native-elements';
 import {TouchableOpacity} from 'react-native-gesture-handler';
 import {Context} from '../../../Context/Context';
 import useSearchBar from '../../../hooks/useSearchBar';
 import {recipiesApi} from '../../../services/API';
 import _ from 'lodash';
+import {useLoader} from '../../../hooks/useLoader';
 
 export default function Info({navigation}) {
   const {setDataForCurrentDish} = useContext(Context);
   const [recepiesList, setRecepiesList] = useState([]);
+  const [number, setNumber] = useState(1);
 
   async function getRecepies() {
-    const res = await recipiesApi.getList();
-    setRecepiesList(res.data);
+    !!recepiesList.length && loader.openLoader();
+    try {
+      const res = await recipiesApi.lazyLoad(10, number);
+      setRecepiesList([...recepiesList, ...res.data]);
+      setNumber((prev) => prev + 1);
+      loader.closeLoader();
+    } catch (e) {
+      console.error(e);
+      loader.closeLoader();
+    }
   }
 
   useEffect(() => {
-    if (!recepiesList.length) {
-      getRecepies();
-    } else {
-      setRecepiesList([]);
-    }
+    !recepiesList.length && getRecepies();
   }, []);
+  const loader = useLoader();
 
   const searchBar = useSearchBar();
 
@@ -63,10 +70,14 @@ export default function Info({navigation}) {
         justifyContent: 'center',
       }}>
       {searchBar.searchBar()}
+      {loader.loaderComponent()}
       <FlatList
         data={recepiesList}
         renderItem={cardWithRecipe}
         keyExtractor={(item) => item.id}
+        onEndReached={getRecepies}
+        onEndReachedThreshold={0.6}
+        ListFooterComponent={() => loader.loaderComponent()}
       />
     </View>
   );

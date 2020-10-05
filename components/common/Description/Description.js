@@ -63,7 +63,6 @@ export default function Description({navigation}) {
     instructionImage,
     nutritionsContainer,
   } = styles;
-  console.log(state);
 
   return (
     <ScrollView style={container}>

@@ -38,14 +38,14 @@ export default function NavigatiorContainer() {
       <Stack.Navigator
         screenOptions={{
           headerStyle: {
-            shadowColor: '#000',
-            shadowOffset: {
-              width: 0,
-              height: 7,
-            },
-            shadowOpacity: 0.43,
-            shadowRadius: 9.51,
-            elevation: 11,
+            // shadowColor: '#000',
+            // shadowOffset: {
+            //   width: 0,
+            //   height: 7,
+            // },
+            // shadowOpacity: 0.43,
+            // shadowRadius: 9.51,
+            // elevation: 5,
           },
         }}>
         <Stack.Screen
@@ -54,7 +54,7 @@ export default function NavigatiorContainer() {
           options={({navigation, route}) => ({
             headerTitle: 'Home',
             headerRightContainerStyle: {
-              paddingHorizontal: 20,
+              paddingHorizontal: 5,
             },
             headerRight: () => (
               <Button

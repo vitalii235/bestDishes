@@ -6,18 +6,15 @@ export const Context = createContext();
 export const ContextProvider = ({children}) => {
   const [auth, setAuth] = useState(false);
   const [currentDish, setCurrentDish] = useState({});
-
+  console.log('currentDish===>>>', currentDish);
   const setDataForCurrentDish = (key, item) => {
-    setCurrentDish({...currentDish, [key]:item});
+    setCurrentDish({...currentDish, [key]: item});
   };
 
   const checkStorage = async () => {
     const res = await AsyncStorage.getItem('token');
-    if (res !== null) {
-      setAuth(true);
-    } else {
-      setAuth(false);
-    }
+    if (res !== null) return setAuth(true);
+    return setAuth(false);
   };
   useEffect(() => {
     checkStorage();
