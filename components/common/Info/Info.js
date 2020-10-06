@@ -11,14 +11,19 @@ import {useLoader} from '../../../hooks/useLoader';
 export default function Info({navigation}) {
   const {setDataForCurrentDish} = useContext(Context);
   const [recepiesList, setRecepiesList] = useState([]);
-  const [number, setNumber] = useState(1);
+  const [listFromSearch, setListFromSearch] = useState([]);
+  const [number, setNumber] = useState(0);
+
+  // custom hooks
+  const loader = useLoader();
+  const searchBar = useSearchBar();
 
   async function getRecepies() {
     !!recepiesList.length && loader.openLoader();
     try {
-      const res = await recipiesApi.lazyLoad(10, number);
+      const res = await recipiesApi.lazyLoad(number, 10);
       setRecepiesList([...recepiesList, ...res.data]);
-      setNumber((prev) => prev + 1);
+      setNumber((prev) => prev + 10);
       loader.closeLoader();
     } catch (e) {
       console.error(e);
@@ -26,12 +31,26 @@ export default function Info({navigation}) {
     }
   }
 
+  const getRecepiesFromSearch = async (text, skip, limit) => {
+    try {
+      const res = await recipiesApi.searcResults(text, skip, limit);
+      setListFromSearch([...listFromSearch, ...res.data]);
+      setNumber((prev) => prev + 8);
+    } catch (e) {
+      console.error(e);
+    }
+  };
+
   useEffect(() => {
     !recepiesList.length && getRecepies();
   }, []);
-  const loader = useLoader();
 
-  const searchBar = useSearchBar();
+  useEffect(() => {
+    if (searchBar.text) {
+      getRecepiesFromSearch(searchBar.text, number, 8);
+    }
+    if (searchBar.text === '') setListFromSearch([]);
+  }, [searchBar.text]);
 
   function cardWithRecipe({item}) {
     if (!item.name || !item.categories.length || !item.image) {
@@ -48,13 +67,11 @@ export default function Info({navigation}) {
               <Text>{item.name}</Text>
               <Card.Divider />
               <Text>Категория: {item.categories.join(', ')}</Text>
-              {_.first(item.instructions) && (
-                <Card.Image
-                  source={{
-                    uri: item.image,
-                  }}
-                />
-              )}
+              <Card.Image
+                source={{
+                  uri: item.image,
+                }}
+              />
             </View>
             <Text>Время приготовления: {item.total_time}</Text>
           </TouchableOpacity>
@@ -62,7 +79,7 @@ export default function Info({navigation}) {
       );
     }
   }
-
+  console.log('istFromSearch==>>>', number);
   return (
     <View
       style={{
@@ -70,12 +87,14 @@ export default function Info({navigation}) {
         justifyContent: 'center',
       }}>
       {searchBar.searchBar()}
-      {loader.loaderComponent()}
+
       <FlatList
-        data={recepiesList}
+        data={!!listFromSearch.length ? listFromSearch : recepiesList}
         renderItem={cardWithRecipe}
         keyExtractor={(item) => item.id}
-        onEndReached={getRecepies}
+        onEndReached={
+          !!listFromSearch.length ? getRecepiesFromSearch : getRecepies
+        }
         onEndReachedThreshold={0.6}
         ListFooterComponent={() => loader.loaderComponent()}
       />

@@ -15,9 +15,9 @@ export default function useSearchBar() {
     clearTimeout(ref.current);
     setLoading(true);
     setText(e);
-    ref.current = setTimeout(() => {
+    ref.current = setTimeout(async () => {
       setLoading(false);
-    }, 500);
+    }, 1000);
   };
 
   const ref = useRef(null);
@@ -27,7 +27,7 @@ export default function useSearchBar() {
         {state && (
           <SearchBar
             placeholder="Type Here..."
-            onChangeText={updateSearch}
+            onChangeText={(e) => updateSearch(e)}
             value={text}
             platform="ios"
             showLoading={loading}
@@ -36,5 +36,10 @@ export default function useSearchBar() {
       </View>
     );
   };
-  return {showSearchBar, closeSearchBar, searchBar};
+  return {
+    showSearchBar,
+    closeSearchBar,
+    searchBar,
+    text: !loading ? text : null,
+  };
 }
