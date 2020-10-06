@@ -6,7 +6,7 @@ export const Context = createContext();
 export const ContextProvider = ({children}) => {
   const [auth, setAuth] = useState(false);
   const [currentDish, setCurrentDish] = useState({});
-  console.log('currentDish===>>>', currentDish);
+
   const setDataForCurrentDish = (key, item) => {
     setCurrentDish({...currentDish, [key]: item});
   };

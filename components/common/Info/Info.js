@@ -1,12 +1,15 @@
 import React, {useContext, useEffect, useState} from 'react';
-import {View, Text, FlatList, Button} from 'react-native';
-import {Card} from 'react-native-elements';
 import {TouchableOpacity} from 'react-native-gesture-handler';
 import {Context} from '../../../Context/Context';
 import useSearchBar from '../../../hooks/useSearchBar';
 import {recipiesApi} from '../../../services/API';
 import _ from 'lodash';
 import {useLoader} from '../../../hooks/useLoader';
+import {translations} from '../../../translations/translations';
+import {styles} from './style';
+import {Image, View, FlatList, Text} from 'react-native';
+import {Container, Content, Header, Card, CardItem} from 'native-base';
+import {Col, Row, Grid} from 'react-native-easy-grid';
 
 export default function Info({navigation}) {
   const {setDataForCurrentDish} = useContext(Context);
@@ -15,9 +18,15 @@ export default function Info({navigation}) {
   const [number, setNumber] = useState(0);
   const [numberForSearch, setNumberForSearch] = useState(0);
 
+  //styles
+  const {itemContainer, infoBlock, imageStyle, card, container} = styles;
   // custom hooks
   const loader = useLoader();
   const searchBar = useSearchBar();
+
+  const {
+    info: {category, timeForCooking},
+  } = translations;
 
   async function getRecepies() {
     !!recepiesList.length && loader.openLoader();
@@ -55,33 +64,55 @@ export default function Info({navigation}) {
 
   useEffect(() => {
     searchBar.text && getRecepiesFromSearch(searchBar.text);
-    searchBar.text === '' && setListFromSearch([]) && setListFromSearch(0);
+    if (searchBar.text === '') {
+      setNumberForSearch(0);
+      setListFromSearch([]);
+    }
   }, [searchBar.text]);
-
+  console.log(searchBar.text, numberForSearch, listFromSearch);
   function cardWithRecipe({item}) {
     if (!item.name || !item.categories.length || !item.image) {
       return null;
     } else {
       return (
-        <Card>
-          <TouchableOpacity
-            onPress={() => {
-              setDataForCurrentDish('id', item.id);
-              navigation.navigate('Description');
-            }}>
-            <View>
-              <Text>{item.name}</Text>
-              <Card.Divider />
-              <Text>Категория: {item.categories.join(', ')}</Text>
-              <Card.Image
-                source={{
-                  uri: item.image,
-                }}
-              />
-            </View>
-            <Text>Время приготовления: {item.total_time}</Text>
-          </TouchableOpacity>
-        </Card>
+        <Container style={container}>
+          <Content>
+            <Card style={card}>
+              <TouchableOpacity
+                // style={itemContainer}
+                onPress={() => {
+                  setDataForCurrentDish('id', item.id);
+                  navigation.navigate('Description');
+                }}>
+                <Grid>
+                  <Row size={1 / 2} style={itemContainer}>
+                    <Col style={infoBlock}>
+                      <Text>{item.name}</Text>
+                      {/* <Card.Divider /> */}
+                      <Text>
+                        {category}: {item.categories.join(', ')}
+                      </Text>
+                      <Text>
+                        {timeForCooking}: {item.total_time}
+                      </Text>
+                    </Col>
+                    <Col>
+                      <CardItem cardBody>
+                        <Image
+                          //style={imageStyle}
+                          style={{height: 210, width: null, flex: 1}}
+                          source={{
+                            uri: item.image,
+                          }}
+                        />
+                      </CardItem>
+                    </Col>
+                  </Row>
+                </Grid>
+              </TouchableOpacity>
+            </Card>
+          </Content>
+        </Container>
       );
     }
   }

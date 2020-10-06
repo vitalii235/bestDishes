@@ -6,12 +6,21 @@ import {ActivityIndicator} from 'react-native';
 import {Card, Divider, Image} from 'react-native-elements';
 import {Text} from 'react-native-elements';
 import {styles} from './style';
+import {translations} from '../../../translations/translations';
 
 export default function Description({navigation}) {
   const {
     currentDish: {id},
   } = useContext(Context);
-
+  const {
+    description: {
+      ingridients,
+      timeForCooking,
+      numberOfPortions,
+      nutritionVallue,
+      instructionForCooking,
+    },
+  } = translations;
   const [state, setState] = useState({});
   //Request for getting data
   const getDetails = async () => {
@@ -77,25 +86,27 @@ export default function Description({navigation}) {
         </Text>
         <Text>{state.description}</Text>
         <Divider />
-        <Text style={title}>Ингредиенты:</Text>
+        <Text style={title}>{ingridients}:</Text>
         {state.ingridients &&
           state.ingridients.map((i, id) => ingridiensList(i))}
         <Divider />
         <View>
-          <Text>Сумарное время приготовления - {state.total_time}</Text>
           <Text>
-            Количество порций согластно рецепту - {state.portions_by_recipe}
+            {timeForCooking} - {state.total_time}
+          </Text>
+          <Text>
+            {numberOfPortions} - {state.portions_by_recipe}
           </Text>
         </View>
         <Divider />
         <View>
-          <Text>Пищевая ценность:</Text>
+          <Text>{nutritionVallue}:</Text>
           {state.nutritional_values &&
             state.nutritional_values.map((i) => nutritionsList(i))}
         </View>
         <Divider />
         <View>
-          <Text>Инструкция по приготовлению:</Text>
+          <Text>{instructionForCooking}:</Text>
           {state.instructions &&
             state.instructions.map((i, id) => instructionsList(i))}
         </View>

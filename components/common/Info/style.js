@@ -2,14 +2,30 @@ const {StyleSheet} = require('react-native');
 
 export const styles = StyleSheet.create({
   container: {
+    //flex: 1,
+    //paddingHorizontal: 10,
+    paddingHorizontal: 10,
+    height: 'auto',
+  },
+  card: {
+    paddingHorizontal: 10,
+  },
+  itemContainer: {
+    borderColor: 'pink',
+    borderWidth: 2,
     flex: 1,
-    paddingHorizontal: 15,
-    paddingHorizontal: 20,
+    alignItems: 'center',
   },
   imageStyle: {
-    width: 300,
-    height: 300,
-    borderWidth: 3,
+    borderColor: 'blue',
+    borderWidth: 2,
+    width: 200,
+    height: 'auto',
+    flex: 1,
+  },
+  infoBlock: {
     borderColor: 'red',
+    borderWidth: 2,
+    //height: '',
   },
 });
