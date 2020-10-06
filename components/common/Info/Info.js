@@ -13,6 +13,7 @@ export default function Info({navigation}) {
   const [recepiesList, setRecepiesList] = useState([]);
   const [listFromSearch, setListFromSearch] = useState([]);
   const [number, setNumber] = useState(0);
+  const [numberForSearch, setNumberForSearch] = useState(0);
 
   // custom hooks
   const loader = useLoader();
@@ -31,13 +32,20 @@ export default function Info({navigation}) {
     }
   }
 
-  const getRecepiesFromSearch = async (text, skip, limit) => {
+  const getRecepiesFromSearch = async () => {
+    !!listFromSearch.length && loader.openLoader();
     try {
-      const res = await recipiesApi.searcResults(text, skip, limit);
+      const res = await recipiesApi.searcResults(
+        searchBar.text,
+        numberForSearch,
+        10,
+      );
       setListFromSearch([...listFromSearch, ...res.data]);
-      setNumber((prev) => prev + 8);
+      setNumberForSearch((prev) => prev + 10);
+      loader.closeLoader();
     } catch (e) {
       console.error(e);
+      loader.closeLoader();
     }
   };
 
@@ -46,10 +54,8 @@ export default function Info({navigation}) {
   }, []);
 
   useEffect(() => {
-    if (searchBar.text) {
-      getRecepiesFromSearch(searchBar.text, number, 8);
-    }
-    if (searchBar.text === '') setListFromSearch([]);
+    searchBar.text && getRecepiesFromSearch(searchBar.text);
+    searchBar.text === '' && setListFromSearch([]) && setListFromSearch(0);
   }, [searchBar.text]);
 
   function cardWithRecipe({item}) {
@@ -79,7 +85,7 @@ export default function Info({navigation}) {
       );
     }
   }
-  console.log('istFromSearch==>>>', number);
+
   return (
     <View
       style={{
@@ -87,7 +93,6 @@ export default function Info({navigation}) {
         justifyContent: 'center',
       }}>
       {searchBar.searchBar()}
-
       <FlatList
         data={!!listFromSearch.length ? listFromSearch : recepiesList}
         renderItem={cardWithRecipe}

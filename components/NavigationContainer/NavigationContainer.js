@@ -24,14 +24,7 @@ export default function NavigatiorContainer() {
     const routeName = route.state
       ? route.state.routes[route.state.index].name
       : 'SignIn';
-    switch (routeName) {
-      case 'Auth':
-        return 'Auth';
-      case 'SignIn':
-        return 'SignIn';
-      case 'SignUp':
-        return 'SignUp';
-    }
+    return routeName;
   };
   return (
     <NavigationContainer>
