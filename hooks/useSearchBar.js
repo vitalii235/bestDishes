@@ -1,6 +1,7 @@
 import React, {useRef, useState} from 'react';
 import {View} from 'react-native';
 import {SearchBar} from 'react-native-elements';
+import {Container, Header, Item, Input, Icon, Button, Text} from 'native-base';
 
 export default function useSearchBar() {
   const [text, setText] = useState('');
@@ -15,9 +16,13 @@ export default function useSearchBar() {
     clearTimeout(ref.current);
     setLoading(true);
     setText(e);
-    ref.current = setTimeout(async () => {
+    if (e !== '') {
+      ref.current = setTimeout(async () => {
+        setLoading(false);
+      }, 1000);
+    } else {
       setLoading(false);
-    }, 1000);
+    }
   };
 
   const ref = useRef(null);
@@ -25,14 +30,20 @@ export default function useSearchBar() {
     return (
       <View>
         {state && (
-          <SearchBar
-            placeholder="Type Here..."
-            onChangeText={(e) => updateSearch(e)}
-            value={text}
-            platform="ios"
-            showLoading={loading}
-            autoCapitalize="none"
-          />
+          <Header searchBar rounded>
+            <Item>
+              <Icon name="ios-search" />
+              <Input
+                placeholder="Search"
+                onChangeText={updateSearch}
+                value={text}
+              />
+              {/* <Icon name="ios-people" /> */}
+            </Item>
+            <Button transparent>
+              <Text>Search</Text>
+            </Button>
+          </Header>
         )}
       </View>
     );

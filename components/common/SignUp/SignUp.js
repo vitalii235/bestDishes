@@ -4,7 +4,6 @@ import {
   ImageBackground,
   TouchableWithoutFeedback,
   Keyboard,
-  Alert,
 } from 'react-native';
 import {authApi} from '../../../services/API';
 import {SignUpContainer} from './styles';

@@ -7,8 +7,8 @@ import _ from 'lodash';
 import {useLoader} from '../../../hooks/useLoader';
 import {translations} from '../../../translations/translations';
 import {styles} from './style';
-import {Image, View, FlatList, Text} from 'react-native';
-import {Container, Content, Header, Card, CardItem} from 'native-base';
+import {Image, View, FlatList, Text, ImageBackground} from 'react-native';
+import {Container, Content, Card, CardItem} from 'native-base';
 import {Col, Row, Grid} from 'react-native-easy-grid';
 
 export default function Info({navigation}) {
@@ -69,71 +69,70 @@ export default function Info({navigation}) {
       setListFromSearch([]);
     }
   }, [searchBar.text]);
-  console.log(searchBar.text, numberForSearch, listFromSearch);
+
   function cardWithRecipe({item}) {
     if (!item.name || !item.categories.length || !item.image) {
       return null;
     } else {
       return (
-        <Container style={container}>
-          <Content>
-            <Card style={card}>
-              <TouchableOpacity
-                // style={itemContainer}
-                onPress={() => {
-                  setDataForCurrentDish('id', item.id);
-                  navigation.navigate('Description');
-                }}>
-                <Grid>
-                  <Row size={1 / 2} style={itemContainer}>
-                    <Col style={infoBlock}>
-                      <Text>{item.name}</Text>
-                      {/* <Card.Divider /> */}
-                      <Text>
-                        {category}: {item.categories.join(', ')}
-                      </Text>
-                      <Text>
-                        {timeForCooking}: {item.total_time}
-                      </Text>
-                    </Col>
-                    <Col>
-                      <CardItem cardBody>
-                        <Image
-                          //style={imageStyle}
-                          style={{height: 210, width: null, flex: 1}}
-                          source={{
-                            uri: item.image,
-                          }}
-                        />
-                      </CardItem>
-                    </Col>
-                  </Row>
-                </Grid>
-              </TouchableOpacity>
-            </Card>
-          </Content>
-        </Container>
+        <View style={container}>
+          <Card style={card}>
+            <TouchableOpacity
+              onPress={() => {
+                setDataForCurrentDish('id', item.id);
+                navigation.navigate('Description');
+              }}>
+              <Grid>
+                <Row style={itemContainer}>
+                  <Col style={infoBlock} size={2 / 3}>
+                    <Text>{item.name}</Text>
+                    <Text>
+                      {category}: {item.categories.join(', ')}
+                    </Text>
+                    <Text>
+                      {timeForCooking}: {item.total_time}
+                    </Text>
+                  </Col>
+                  <Col size={1 / 3}>
+                    <CardItem cardBody>
+                      <Image
+                        style={imageStyle}
+                        source={{
+                          uri: item.image,
+                        }}
+                      />
+                    </CardItem>
+                  </Col>
+                </Row>
+              </Grid>
+            </TouchableOpacity>
+          </Card>
+        </View>
       );
     }
   }
 
   return (
-    <View
-      style={{
-        flex: 1,
-        justifyContent: 'center',
-      }}>
-      {searchBar.searchBar()}
-      <FlatList
-        data={!!listFromSearch.length ? listFromSearch : recepiesList}
-        renderItem={cardWithRecipe}
-        keyExtractor={(item) => item.id}
-        onEndReached={
-          !!listFromSearch.length ? getRecepiesFromSearch : getRecepies
-        }
-        onEndReachedThreshold={0.6}
-        ListFooterComponent={() => loader.loaderComponent()}
-      />
-    </View>
+    <ImageBackground
+      source={require('../../../public/images/authBackground.jpg')}
+      style={{flex: 1, resizeMode: 'auto'}}>
+      <View
+        style={{
+          flex: 1,
+          justifyContent: 'center',
+        }}>
+        {searchBar.searchBar()}
+        <FlatList
+          data={!!listFromSearch.length ? listFromSearch : recepiesList}
+          renderItem={cardWithRecipe}
+          keyExtractor={(item) => item.id}
+          onEndReached={
+            !!listFromSearch.length ? getRecepiesFromSearch : getRecepies
+          }
+          onEndReachedThreshold={0.6}
+          ListFooterComponent={() => loader.loaderComponent()}
+        />
+      </View>
+    </ImageBackground>
   );
 }

@@ -7,6 +7,7 @@ import {Card, Divider, Image} from 'react-native-elements';
 import {Text} from 'react-native-elements';
 import {styles} from './style';
 import {translations} from '../../../translations/translations';
+import {Rating, AirbnbRating} from 'react-native-elements';
 
 export default function Description({navigation}) {
   const {
@@ -80,6 +81,9 @@ export default function Description({navigation}) {
         style={imageStyle}
         PlaceholderContent={<ActivityIndicator />}
       />
+
+      <AirbnbRating onFinishRating={(i) => console.log(i)} />
+
       <View style={context}>
         <Text h4 style={title}>
           {state.name}
