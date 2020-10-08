@@ -3,23 +3,11 @@ import {Button} from 'react-native';
 import {NavigationContainer} from '@react-navigation/native';
 import {createStackNavigator} from '@react-navigation/stack';
 import Auth from '../containers/Auth/Auth';
-import {Context} from '../../Context/Context';
-import AsyncStorage from '@react-native-community/async-storage';
 import Info from '../common/Info/Info';
 import Description from '../common/Description/Description';
 
 const Stack = createStackNavigator();
 export default function NavigatiorContainer() {
-  const {auth, checkStorage} = useContext(Context);
-
-  const logIn = async (navigation) => {
-    navigation.navigate('Auth');
-  };
-  const logOut = async () => {
-    await AsyncStorage.clear();
-    checkStorage();
-  };
-
   const getHeaderTitle = (route) => {
     const routeName = route.state
       ? route.state.routes[route.state.index].name
@@ -31,6 +19,7 @@ export default function NavigatiorContainer() {
       <Stack.Navigator
         screenOptions={{
           headerStyle: {
+            height: 80,
             // shadowColor: '#000',
             // shadowOffset: {
             //   width: 0,
@@ -49,13 +38,13 @@ export default function NavigatiorContainer() {
             headerRightContainerStyle: {
               paddingHorizontal: 5,
             },
-            headerRight: () => (
-              <Button
-                onPress={auth ? logOut : () => logIn(navigation)}
-                title={auth ? 'logOut' : 'SignIn'}
-                color="black"
-              />
-            ),
+            // headerRight: () => (
+            //   <Button
+            //     onPress={auth ? logOut : () => logIn(navigation)}
+            //     title={auth ? 'logOut' : 'SignIn'}
+            //     color="black"
+            //   />
+            // ),
           })}
         />
         <Stack.Screen name="Description" component={Description} />

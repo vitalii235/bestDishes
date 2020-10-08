@@ -1,6 +1,5 @@
 import React, {memo} from 'react';
-import {StyleSheet} from 'react-native';
-import {SafeAreaView} from 'react-native-safe-area-context';
+import {StyleSheet, View} from 'react-native';
 import NavigatiorContainer from './components/NavigationContainer/NavigationContainer';
 import {ContextProvider} from './Context/Context';
 
@@ -8,11 +7,11 @@ export default function App() {
   const Navigation = memo(() => <NavigatiorContainer />);
 
   return (
-    <SafeAreaView style={styles.container}>
+    <View style={styles.container}>
       <ContextProvider>
         <Navigation />
       </ContextProvider>
-    </SafeAreaView>
+    </View>
   );
 }
 

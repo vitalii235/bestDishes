@@ -7,6 +7,17 @@ export const styles = StyleSheet.create({
     paddingHorizontal: 10,
     height: 'auto',
   },
+  cardItem: {position: 'relative'},
+  overlay: {
+    position: 'absolute',
+    width: '100%',
+    height: '100%',
+    //backgroundColor: 'red',
+    borderColor: 'white',
+    borderTopWidth: 20,
+    borderBottomWidth: 20,
+    zIndex: 10,
+  },
   card: {
     paddingHorizontal: 10,
   },

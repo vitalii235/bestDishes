@@ -1,4 +1,4 @@
-import React, {useContext, useEffect, useState} from 'react';
+import React, {useContext, useEffect, useState, useRef} from 'react';
 import {TouchableOpacity} from 'react-native-gesture-handler';
 import {Context} from '../../../Context/Context';
 import useSearchBar from '../../../hooks/useSearchBar';
@@ -8,7 +8,7 @@ import {useLoader} from '../../../hooks/useLoader';
 import {translations} from '../../../translations/translations';
 import {styles} from './style';
 import {Image, View, FlatList, Text, ImageBackground} from 'react-native';
-import {Container, Content, Card, CardItem} from 'native-base';
+import {Card, CardItem} from 'native-base';
 import {Col, Row, Grid} from 'react-native-easy-grid';
 
 export default function Info({navigation}) {
@@ -17,17 +17,27 @@ export default function Info({navigation}) {
   const [listFromSearch, setListFromSearch] = useState([]);
   const [number, setNumber] = useState(0);
   const [numberForSearch, setNumberForSearch] = useState(0);
+  const [pastPossition, setPastPossition] = useState(0);
+  const [possition, setPossition] = useState(0);
 
   //styles
-  const {itemContainer, infoBlock, imageStyle, card, container} = styles;
+  const {
+    itemContainer,
+    infoBlock,
+    imageStyle,
+    card,
+    container,
+    overlay,
+    cardItem,
+  } = styles;
   // custom hooks
   const loader = useLoader();
-  const searchBar = useSearchBar();
-
+  const searchBar = useSearchBar(navigation);
+  // text from data
   const {
     info: {category, timeForCooking},
   } = translations;
-
+  // get all recipies
   async function getRecepies() {
     !!recepiesList.length && loader.openLoader();
     try {
@@ -40,9 +50,10 @@ export default function Info({navigation}) {
       loader.closeLoader();
     }
   }
-
+  // get recipies from search
   const getRecepiesFromSearch = async () => {
     !!listFromSearch.length && loader.openLoader();
+
     try {
       const res = await recipiesApi.searcResults(
         searchBar.text,
@@ -57,9 +68,10 @@ export default function Info({navigation}) {
       loader.closeLoader();
     }
   };
-
+  // updating the page
   useEffect(() => {
     !recepiesList.length && getRecepies();
+    //searchBar.showSearchBar();
   }, []);
 
   useEffect(() => {
@@ -70,12 +82,13 @@ export default function Info({navigation}) {
     }
   }, [searchBar.text]);
 
+  // Rendered component
   function cardWithRecipe({item}) {
     if (!item.name || !item.categories.length || !item.image) {
       return null;
     } else {
       return (
-        <View style={container}>
+        <View style={container} key={Math.random().toString()}>
           <Card style={card}>
             <TouchableOpacity
               onPress={() => {
@@ -94,7 +107,8 @@ export default function Info({navigation}) {
                     </Text>
                   </Col>
                   <Col size={1 / 3}>
-                    <CardItem cardBody>
+                    <CardItem cardBody style={cardItem}>
+                      <View style={overlay} />
                       <Image
                         style={imageStyle}
                         source={{
@@ -111,7 +125,26 @@ export default function Info({navigation}) {
       );
     }
   }
+  const pastCoordinates = useRef(0);
+  const checkTimeOut = useRef(null);
+  const settleSearchBarVisible = (screen) => {
+    clearTimeout(checkTimeOut.current);
+    const coordinates = screen.nativeEvent.contentOffset.y;
 
+    setPossition((prev) => (prev = coordinates));
+    checkTimeOut.current = setTimeout(() => {
+      setPastPossition((prev) => (prev = coordinates));
+    }, 500);
+  };
+  useEffect(() => {
+    if (pastPossition < possition) {
+      searchBar.closeSearchBar();
+    } else {
+      searchBar.showSearchBar();
+    }
+  }, [possition]);
+  console.log('possitiop==>>', possition);
+  console.log('pastPossition===>>>', pastPossition);
   return (
     <ImageBackground
       source={require('../../../public/images/authBackground.jpg')}
@@ -124,6 +157,7 @@ export default function Info({navigation}) {
         {searchBar.searchBar()}
         <FlatList
           data={!!listFromSearch.length ? listFromSearch : recepiesList}
+          onScroll={settleSearchBarVisible}
           renderItem={cardWithRecipe}
           keyExtractor={(item) => item.id}
           onEndReached={
