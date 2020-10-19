@@ -26,6 +26,7 @@ export default function Description({navigation}) {
   //Request for getting data
   const getDetails = async () => {
     const res = await recipiesApi.getRecipe(id);
+    console.log('RES===>>>', res);
     setState(res.data);
   };
   // List of ingridients
@@ -42,7 +43,7 @@ export default function Description({navigation}) {
     return (
       <View key={Math.random().toString()}>
         <Text>{item.text}</Text>
-        <Card.Image source={{uri: item.image}} style={instructionImage} />
+        {/* <Card.Image source={{uri: item.image}} style={instructionImage} /> */}
       </View>
     );
   };
@@ -76,11 +77,11 @@ export default function Description({navigation}) {
 
   return (
     <ScrollView style={container}>
-      <Image
+      {/* <Image
         source={{uri: state.image}}
         style={imageStyle}
         PlaceholderContent={<ActivityIndicator />}
-      />
+      /> */}
 
       <View style={context}>
         <Text h4 style={title}>
