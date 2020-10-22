@@ -71,17 +71,17 @@ export default function Description({navigation}) {
     context,
     imageStyle,
     ingridientsContainer,
-    instructionImage,
+    // instructionImage,
     nutritionsContainer,
   } = styles;
 
   return (
     <ScrollView style={container}>
-      {/* <Image
+      <Image
         source={{uri: state.image}}
         style={imageStyle}
         PlaceholderContent={<ActivityIndicator />}
-      /> */}
+      />
 
       <View style={context}>
         <Text h4 style={title}>
@@ -90,8 +90,7 @@ export default function Description({navigation}) {
         <Text>{state.description}</Text>
         <Divider />
         <Text style={title}>{ingridients}:</Text>
-        {state.ingridients &&
-          state.ingridients.map((i, id) => ingridiensList(i))}
+        {state?.ingridients?.map(ingridiensList)}
         <Divider />
         <View>
           <Text>
@@ -104,14 +103,12 @@ export default function Description({navigation}) {
         <Divider />
         <View>
           <Text>{nutritionVallue}:</Text>
-          {state.nutritional_values &&
-            state.nutritional_values.map((i) => nutritionsList(i))}
+          {state?.nutritional_values?.map(nutritionsList)}
         </View>
         <Divider />
         <View>
           <Text>{instructionForCooking}:</Text>
-          {state.instructions &&
-            state.instructions.map((i, id) => instructionsList(i))}
+          {state?.instructions?.map(instructionsList)}
         </View>
       </View>
     </ScrollView>

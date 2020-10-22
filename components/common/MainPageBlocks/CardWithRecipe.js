@@ -20,7 +20,7 @@ const CardWithRecipe = ({item, navigation, setDataForCurrentDish}) => {
   const {
     info: {category, timeForCooking},
   } = translations;
-  console.log('ITEM===>>', navigation);
+
   return (
     <View style={container} key={Math.random().toString()}>
       <TouchableOpacity
@@ -38,7 +38,7 @@ const CardWithRecipe = ({item, navigation, setDataForCurrentDish}) => {
                   {category}: {item?.categories?.join(', ')}
                 </Text>
                 <Text>
-                  {timeForCooking}: {item?.total_time}
+                  {item.total_time && `${timeForCooking}: ${item.total_time}`}
                 </Text>
               </Col>
               <Col size={1 / 3}>

@@ -3,7 +3,7 @@ import {Spinner} from 'native-base';
 import {View} from 'react-native';
 
 export const useLoader = () => {
-  const [toggleLoader, setToggleLoader] = useState(false);
+  const [toggleLoader, setToggleLoader] = useState(true);
   const openLoader = () => setToggleLoader(true);
   const closeLoader = () => setToggleLoader(false);
   const loaderComponent = (color) => (

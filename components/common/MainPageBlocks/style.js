@@ -20,6 +20,7 @@ export const styles = StyleSheet.create({
   card: {
     paddingHorizontal: 10,
     height: 180,
+    borderRadius: 10,
   },
   itemContainer: {
     flex: 1,
