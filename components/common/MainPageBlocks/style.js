@@ -1,3 +1,5 @@
+import {gray, white} from '../../../theme/palette';
+
 const {StyleSheet} = require('react-native');
 
 export const styles = StyleSheet.create({
@@ -6,37 +8,60 @@ export const styles = StyleSheet.create({
     paddingHorizontal: 10,
     height: 'auto',
   },
-  cardItem: {position: 'relative'},
-  overlay: {
-    position: 'absolute',
-    width: '100%',
-    height: '100%',
-    //backgroundColor: 'red',
-    borderColor: 'white',
-    borderTopWidth: 20,
-    borderBottomWidth: 20,
-    zIndex: 10,
-  },
+  cardItem: {position: 'relative', marginTop: 5},
   card: {
-    paddingHorizontal: 10,
-    height: 180,
+    display: 'flex',
+    height: 230,
     borderRadius: 10,
+    // alignItems: 'center',
+    borderTopRightRadius: 0,
+    borderBottomLeftRadius: 0,
+    position: 'relative',
   },
-  itemContainer: {
-    flex: 1,
+  likesContainer: {
+    display: 'flex',
+    flexDirection: 'row',
     alignItems: 'center',
+    marginLeft: 10,
   },
   imageStyle: {
-    height: 160,
+    height: 220,
     width: null,
     flex: 1,
   },
   infoBlock: {
-    paddingRight: 5,
-    marginRight: 10,
-    borderRightWidth: 1,
-    borderRightColor: 'gray',
-    height: '100%',
-    justifyContent: 'space-evenly',
+    display: 'flex',
+    flexDirection: 'row',
+    width: '100%',
+    justifyContent: 'space-between',
+    // paddingHorizontal: 10,
+    position: 'relative',
+  },
+  leftSide: {
+    display: 'flex',
+    flexDirection: 'row',
+    position: 'absolute',
+    left: 0,
+    backgroundColor: white,
+    top: -25,
+    padding: 5,
+    borderTopRightRadius: 5,
+  },
+  categories: {
+    position: 'absolute',
+    right: 0,
+    backgroundColor: white,
+    top: -25,
+    padding: 5,
+    borderTopLeftRadius: 5,
+  },
+  title: {
+    position: 'absolute',
+    right: 0,
+    backgroundColor: white,
+    top: 0,
+    padding: 5,
+    borderBottomLeftRadius: 5,
+    zIndex: 200,
   },
 });

@@ -89,7 +89,7 @@ export default function Info({navigation}) {
     },
     (type, dim) => {
       dim.width = width;
-      dim.height = 200;
+      dim.height = 270;
     },
   );
   const [data, setData] = useState(dataProvider.cloneWithRows([1]));
@@ -126,7 +126,10 @@ export default function Info({navigation}) {
       source={require('../../../public/images/authBackground.jpg')}
       style={backgroundImg}>
       <View style={container}>
-        <View style={{position:"absolute", top:0, zIndex:50000, width:"100%"}}>{searchBar.searchBar()}</View>
+        <View
+          style={{position: 'absolute', top: 0, zIndex: 50000, width: '100%'}}>
+          {searchBar.searchBar()}
+        </View>
         <RecyclerListView
           dataProvider={data}
           style={renderList}

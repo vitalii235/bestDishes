@@ -1,20 +1,22 @@
 import React from 'react';
-import {Card, CardItem, Text, View} from 'native-base';
+import {Card, CardItem, Text, View, Title} from 'native-base';
 import {Image} from 'react-native';
-import {Col, Row, Grid} from 'react-native-easy-grid';
 import {styles} from './style';
 import {TouchableOpacity} from 'react-native-gesture-handler';
 import {translations} from '../../../translations/translations';
+import AntDesign from 'react-native-vector-icons/AntDesign';
 
 const CardWithRecipe = ({item, navigation, setDataForCurrentDish}) => {
   const {
-    itemContainer,
+    likesContainer,
     infoBlock,
     imageStyle,
     card,
     container,
-    overlay,
     cardItem,
+    categories,
+    leftSide,
+    title,
   } = styles;
 
   const {
@@ -30,30 +32,30 @@ const CardWithRecipe = ({item, navigation, setDataForCurrentDish}) => {
           navigation.navigate('Description');
         }}>
         <Card style={card}>
-          <Grid>
-            <Row style={itemContainer}>
-              <Col style={infoBlock} size={2 / 3}>
-                <Text>{item?.name}</Text>
-                <Text>
-                  {category}: {item?.categories?.join(', ')}
-                </Text>
-                <Text>
-                  {item.total_time && `${timeForCooking}: ${item.total_time}`}
-                </Text>
-              </Col>
-              <Col size={1 / 3}>
-                <CardItem cardBody style={cardItem}>
-                  <View style={overlay} />
-                  <Image
-                    style={imageStyle}
-                    source={{
-                      uri: item?.image,
-                    }}
-                  />
-                </CardItem>
-              </Col>
-            </Row>
-          </Grid>
+          <View style={title}>
+            <Title>{item?.name ?? 'Блюдо'}</Title>
+          </View>
+          {/* <Subtitle>Test</Subtitle> */}
+          <CardItem cardBody style={cardItem}>
+            <Image
+              style={imageStyle}
+              source={{
+                uri: item?.image,
+              }}
+            />
+          </CardItem>
+          <View style={infoBlock}>
+            <View style={leftSide}>
+              <Text>{item?.total_time}</Text>
+              <View style={likesContainer}>
+                <AntDesign name="hearto" size={15} />
+                <Text>13</Text>
+              </View>
+            </View>
+            {/* <View style={categories}>
+              <Text>{item?.categories?.[0]}</Text>
+            </View> */}
+          </View>
         </Card>
       </TouchableOpacity>
     </View>
